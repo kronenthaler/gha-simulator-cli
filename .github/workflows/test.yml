@@ -1,0 +1,22 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'adopt-openj9'
+        java-version: '23.0.2'
+
+    - name: Test
+      run: ./gradlew test
