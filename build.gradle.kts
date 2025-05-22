@@ -14,7 +14,10 @@ repositories {
 }
 
 dependencies {
+    implementation("org.yaml:snakeyaml:2.4")
+
     testImplementation(kotlin("test"))
+    testImplementation("io.mockk:mockk:1.14.2")
 }
 
 tasks.test {
