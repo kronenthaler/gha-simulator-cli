@@ -30,7 +30,7 @@ class JobTest {
     fun `test completed method sets completed true`() {
         val job = Job("deploy", 3, "ubuntu-latest", emptyList())
         assertFalse(job.isCompleted)
-        job.markCompleted()
+        job.markAsCompleted()
         assertTrue(job.isCompleted)
     }
 }

@@ -18,7 +18,7 @@ class Runner(val jobQueue: JobQueue, val label: String, val timescale: Int) : Th
                 val job = jobQueue.getJob(label)
                 logger.log(Level.FINER, "Running job: ${job.name} on label: $label")
                 sleep(job.runningTime * timescale.toLong())
-                job.markCompleted()
+                job.markAsCompleted()
             } catch (_: InterruptedException) {
                 logger.log(Level.FINE, "Runner interrupted for label: $label")
             }

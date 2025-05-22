@@ -1,6 +1,11 @@
 package com.github.kronenthaler.ghasimulator
 
+import java.util.logging.Level
+import java.util.logging.Logger
+
 class Job(val name: String, val runningTime: Int, val runsOn: String, val needs: List<Job>) {
+    private val logger: Logger = Logger.getLogger(Job::class.java.name)
+
     var isCompleted: Boolean = false
         private set
 
@@ -15,7 +20,8 @@ class Job(val name: String, val runningTime: Int, val runsOn: String, val needs:
 
     var endQueueTime: Long = 0
 
-    fun markCompleted() {
+    fun markAsCompleted() {
         isCompleted = true
+        logger.log(Level.FINE, "Job $name completed")
     }
 }
