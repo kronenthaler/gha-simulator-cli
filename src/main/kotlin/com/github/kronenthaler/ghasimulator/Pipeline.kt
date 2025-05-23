@@ -43,4 +43,23 @@ class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<
     fun isCompleted(): Boolean {
         return roots.all { it.isCompleted }
     }
+
+    fun check() {
+        if (isCompleted()) {
+            endTime = System.currentTimeMillis()
+            val queueStats = getQueueStats()
+            stats.add(PipelineStats(startTime, endTime, queueStats.totalQueuetime, queueStats.jobCount))
+            logger.info("Pipeline $name completed in ${endTime - startTime} ms")
+            // notifyAll()
+            return
+        }
+
+        // schedule all jobs that are ready to be scheduled
+        flattenJobs(roots)
+            .filter { !it.isScheduled && !it.isCompleted && it.needs.all { it.isCompleted }}
+            .forEach { job ->
+                jobQueue.addJob(job)
+            }
+        // notifyAll() ->
+    }
 }

@@ -96,4 +96,41 @@ class PipelineTest {
         assertEquals(pipeline, jobE.parent)
     }
 
+    @Test
+    fun `test job scheduling`() {
+        val jobA = Job("a", 10, "ubuntu-latest", emptyList())
+        val jobB = Job("b", 10, "ubuntu-latest", listOf(jobA))
+        val jobC = Job("c", 10, "ubuntu-latest", listOf(jobA))
+        val jobE = Job("e", 10, "ubuntu-latest", emptyList())
+        val jobD = Job("d", 10, "ubuntu-latest", listOf(jobB, jobC, jobE))
+
+        val jobQueue = JobQueue(listOf("ubuntu-latest"))
+        val stats = mutableListOf<PipelineStats>()
+        val pipeline = Pipeline("test", jobQueue, stats, listOf(jobA, jobB, jobC, jobD, jobE))
+
+        assertEquals(0, jobQueue.getSize("ubuntu-latest"))
+        assertEquals(0, stats.size)
+
+        pipeline.check()
+
+        // 2 heads should be scheduled (A + E)
+        assertEquals(2, jobQueue.getSize("ubuntu-latest"))
+
+        jobA.markAsCompleted()
+        jobE.markAsCompleted()
+
+        // +2 jobs should be scheduled (B + C)
+        assertEquals(4, jobQueue.getSize("ubuntu-latest"))
+
+        jobC.markAsCompleted()
+        jobB.markAsCompleted()
+
+        // +1 jobs should be scheduled (D)
+        assertEquals(5, jobQueue.getSize("ubuntu-latest"))
+        jobD.markAsCompleted()
+
+        assertTrue(pipeline.isCompleted())
+        assertEquals(1, stats.size)
+        assertEquals(5, stats[0].jobCount)
+    }
 }
