@@ -4,28 +4,40 @@ import org.yaml.snakeyaml.Yaml
 import java.io.File
 import java.util.logging.Logger
 
-class Pipeline(val name: String, val jobQueue: JobQueue, val stats: List<PipelineStats>, val roots: List<Job>) {
+class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<PipelineStats>, val roots: List<Job>) {
     private val logger: Logger = Logger.getLogger(Pipeline::class.java.name)
 
     private val startTime: Long = System.currentTimeMillis()
     private var endTime: Long = 0
 
-    fun getQueueStats(): QueueStats {
-        var totalQueueTime = 0L
+    init {
+       flattenJobs(roots).forEach { job ->
+            job.parent = this
+       }
+    }
+
+    private fun flattenJobs(jobs: List<Job>): List<Job> {
+        val flatList = mutableSetOf<Job>()
+
         val queue = mutableListOf<Job>()
         queue.addAll(roots)
-        val visited = mutableSetOf<Job>()
-        while(!queue.isEmpty()){
+        while (queue.isNotEmpty()) {
             val current = queue.removeAt(0)
-            if (visited.contains(current)) {
-                continue
-            }
-            totalQueueTime += current.getQueueTime()
-            visited.add(current)
+            flatList.add(current)
             queue.addAll(current.needs)
         }
+        return flatList.toList()
+    }
 
-        return QueueStats(totalQueueTime, visited.size)
+    fun getQueueStats(): QueueStats {
+        var totalQueueTime = 0L
+
+        val allJobs = flattenJobs(roots)
+        allJobs.forEach { job ->
+            totalQueueTime += job.getQueueTime()
+        }
+
+        return QueueStats(totalQueueTime, allJobs.size)
     }
 
     fun isCompleted(): Boolean {

@@ -2,6 +2,7 @@ package com.github.kronenthaler.ghasimulator
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -40,6 +41,7 @@ class PipelineTest {
         assertEquals(10+10+10+10+15, queeStats.totalQueuetime)
     }
 
+    @Test
     fun `test isCompleted when all root jobs are completed`() {
         val jobA = Job("a", 10, "ubuntu-latest", emptyList())
         val jobB = Job("b", 10, "ubuntu-latest", listOf(jobA))
@@ -68,4 +70,30 @@ class PipelineTest {
 
         assertTrue(pipeline.isCompleted())
     }
+
+    @Test
+    fun `test that all jobs are assigned a parent`() {
+        val jobA = Job("a", 10, "ubuntu-latest", emptyList())
+        val jobB = Job("b", 10, "ubuntu-latest", listOf(jobA))
+        val jobC = Job("c", 10, "ubuntu-latest", listOf(jobA))
+        val jobE = Job("e", 10, "ubuntu-latest", emptyList())
+        val jobD = Job("d", 10, "ubuntu-latest", listOf(jobB, jobC, jobE))
+
+        assertNull(jobA.parent)
+        assertNull(jobB.parent)
+        assertNull(jobC.parent)
+        assertNull(jobD.parent)
+        assertNull(jobE.parent)
+
+        val jobQueue = JobQueue(listOf("ubuntu-latest"))
+        val stats = mutableListOf<PipelineStats>()
+        val pipeline = Pipeline("test", jobQueue, stats, listOf(jobA, jobB, jobC, jobD, jobE))
+
+        assertEquals(pipeline, jobA.parent)
+        assertEquals(pipeline, jobB.parent)
+        assertEquals(pipeline, jobC.parent)
+        assertEquals(pipeline, jobD.parent)
+        assertEquals(pipeline, jobE.parent)
+    }
+
 }
