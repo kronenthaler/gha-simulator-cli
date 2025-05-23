@@ -24,4 +24,8 @@ class Job(val name: String, val runningTime: Int, val runsOn: String, val needs:
         isCompleted = true
         logger.log(Level.FINE, "Job $name completed")
     }
+
+    fun getQueueTime(): Long {
+        return endQueueTime - startQueueTime
+    }
 }

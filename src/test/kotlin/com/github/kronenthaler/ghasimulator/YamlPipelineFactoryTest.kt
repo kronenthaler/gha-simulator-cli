@@ -6,14 +6,12 @@ import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.assertThrows
 import java.io.FileWriter
-import kotlin.test.assertContains
 import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 
-class PipelineTest {
+class YamlPipelineFactoryTest {
 
     @Test
-    fun `test loadFromYaml pipeline name defaults to file name`() {
+    fun `test load from Yaml pipeline name defaults to file name`() {
         val tempFile = File.createTempFile("test", ".yaml")
         tempFile.deleteOnExit()
 
@@ -22,14 +20,14 @@ class PipelineTest {
         }
 
         val mockJobQueue = mockk<JobQueue>()
-        val stats = emptyList<Stats>()
+        val stats = mutableListOf<PipelineStats>()
 
-        val result = Pipeline.Companion.loadFromYaml(tempFile, mockJobQueue, stats)
+        val result = YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
         assertEquals(result.name, tempFile.nameWithoutExtension)
     }
 
     @Test
-    fun `test loadFromYaml with single root`() {
+    fun `test load from Yaml with single root`() {
         val tempFile = File.createTempFile("test", ".yaml")
         tempFile.deleteOnExit()
 
@@ -61,9 +59,9 @@ class PipelineTest {
         }
 
         val mockJobQueue = mockk<JobQueue>()
-        val stats = emptyList<Stats>()
+        val stats = mutableListOf<PipelineStats>()
 
-        val result = Pipeline.Companion.loadFromYaml(tempFile, mockJobQueue, stats)
+        val result = YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
         assertEquals(1, result.roots.size)
 
         val root = result.roots[0]
@@ -90,7 +88,7 @@ class PipelineTest {
     }
 
     @Test
-    fun `test loadFromYaml with multiple roots`() {
+    fun `test load from Yaml with multiple roots`() {
         val tempFile = File.createTempFile("test", ".yaml")
         tempFile.deleteOnExit()
 
@@ -122,9 +120,9 @@ class PipelineTest {
         }
 
         val mockJobQueue = mockk<JobQueue>()
-        val stats = emptyList<Stats>()
+        val stats = mutableListOf<PipelineStats>()
 
-        val result = Pipeline.Companion.loadFromYaml(tempFile, mockJobQueue, stats)
+        val result = YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
         assertEquals(2, result.roots.size)
 
         val A = result.roots[0]
@@ -151,7 +149,7 @@ class PipelineTest {
     }
 
     @Test
-    fun `test loadFromYaml with cycle`() {
+    fun `test load from Yaml with cycle`() {
         val tempFile = File.createTempFile("test", ".yaml")
         tempFile.deleteOnExit()
 
@@ -173,17 +171,17 @@ class PipelineTest {
         }
 
         val mockJobQueue = mockk<JobQueue>()
-        val stats = emptyList<Stats>()
+        val stats = mutableListOf<PipelineStats>()
 
         val exception = assertThrows<IllegalStateException> {
-            Pipeline.Companion.loadFromYaml(tempFile, mockJobQueue, stats)
+            YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
         }
 
         assertTrue(exception.message!!.contains("Circular dependency detected for job:"))
     }
 
     @Test
-    fun `test loadFromYaml validate time`() {
+    fun `test load from Yaml validate time`() {
         val tempFile = File.createTempFile("test", ".yaml")
         tempFile.deleteOnExit()
 
@@ -203,17 +201,17 @@ class PipelineTest {
         }
 
         val mockJobQueue = mockk<JobQueue>()
-        val stats = emptyList<Stats>()
+        val stats = mutableListOf<PipelineStats>()
 
         val exception = assertThrows<IllegalArgumentException> {
-            Pipeline.Companion.loadFromYaml(tempFile, mockJobQueue, stats)
+            YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
         }
 
         assertTrue(exception.message!!.contains("Job A misses required `time` definition"))
     }
 
     @Test
-    fun `test loadFromYaml validate runs-on`() {
+    fun `test load from Yaml validate runs-on`() {
         val tempFile = File.createTempFile("test", ".yaml")
         tempFile.deleteOnExit()
 
@@ -233,10 +231,10 @@ class PipelineTest {
         }
 
         val mockJobQueue = mockk<JobQueue>()
-        val stats = emptyList<Stats>()
+        val stats = mutableListOf<PipelineStats>()
 
         val exception = assertThrows<IllegalArgumentException> {
-            Pipeline.Companion.loadFromYaml(tempFile, mockJobQueue, stats)
+            YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
         }
 
         assertTrue(exception.message!!.contains("Job A misses required `runs-on` definition"))
