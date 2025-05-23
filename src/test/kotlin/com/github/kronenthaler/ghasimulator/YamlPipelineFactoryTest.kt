@@ -1,12 +1,12 @@
 package com.github.kronenthaler.ghasimulator
 
-import org.junit.jupiter.api.Test
-import java.io.File
 import io.mockk.mockk
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.io.File
 import java.io.FileWriter
-import kotlin.test.assertEquals
 
 class YamlPipelineFactoryTest {
 
