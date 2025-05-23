@@ -1,4 +1,4 @@
-package com.github.kronenthaler.ghasimulator
+package com.github.kronenthaler.ghasimulator.engine
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse

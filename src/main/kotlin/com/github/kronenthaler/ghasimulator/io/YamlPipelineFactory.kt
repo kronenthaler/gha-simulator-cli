@@ -1,5 +1,8 @@
 package com.github.kronenthaler.ghasimulator
 
+import com.github.kronenthaler.ghasimulator.engine.Job
+import com.github.kronenthaler.ghasimulator.engine.JobQueue
+import com.github.kronenthaler.ghasimulator.engine.Pipeline
 import org.yaml.snakeyaml.Yaml
 import java.io.File
 

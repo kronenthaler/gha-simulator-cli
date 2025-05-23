@@ -1,9 +1,9 @@
-package com.github.kronenthaler.ghasimulator
+package com.github.kronenthaler.ghasimulator.engine
 
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class Runner(val jobQueue: JobQueue, val label: String, val timescale: Int) : Thread () {
+class Runner(val jobQueue: JobQueue, val label: String, val timescale: Int) : Thread() {
     private val logger: Logger = Logger.getLogger(Runner::class.java.name)
     private var isRunning: Boolean = true
 

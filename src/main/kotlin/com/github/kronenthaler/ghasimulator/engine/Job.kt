@@ -1,5 +1,6 @@
-package com.github.kronenthaler.ghasimulator
+package com.github.kronenthaler.ghasimulator.engine
 
+import com.github.kronenthaler.ghasimulator.engine.Pipeline
 import java.util.logging.Level
 import java.util.logging.Logger
 
