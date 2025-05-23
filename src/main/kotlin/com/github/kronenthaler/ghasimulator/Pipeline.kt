@@ -1,7 +1,5 @@
 package com.github.kronenthaler.ghasimulator
 
-import org.yaml.snakeyaml.Yaml
-import java.io.File
 import java.util.logging.Logger
 
 class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<PipelineStats>, val roots: List<Job>) {
@@ -9,11 +7,13 @@ class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<
 
     private val startTime: Long = System.currentTimeMillis()
     private var endTime: Long = 0
+    private val lock = Object()
 
     init {
-       flattenJobs(roots).forEach { job ->
+        flattenJobs(roots).forEach { job ->
             job.parent = this
-       }
+        }
+        check()
     }
 
     private fun flattenJobs(jobs: List<Job>): List<Job> {
@@ -44,22 +44,28 @@ class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<
         return roots.all { it.isCompleted }
     }
 
-    fun check() {
+    fun check() = synchronized(lock) {
         if (isCompleted()) {
             endTime = System.currentTimeMillis()
             val queueStats = getQueueStats()
             stats.add(PipelineStats(startTime, endTime, queueStats.totalQueuetime, queueStats.jobCount))
             logger.info("Pipeline $name completed in ${endTime - startTime} ms")
-            // notifyAll()
+            lock.notifyAll()
             return
         }
 
         // schedule all jobs that are ready to be scheduled
         flattenJobs(roots)
-            .filter { !it.isScheduled && !it.isCompleted && it.needs.all { it.isCompleted }}
+            .filter { !it.isScheduled && !it.isCompleted && it.needs.all { it.isCompleted } }
             .forEach { job ->
                 jobQueue.addJob(job)
             }
-        // notifyAll() ->
+        lock.notifyAll()
+    }
+
+    fun waitForCompletion() = synchronized(lock) {
+        while (!isCompleted()) {
+            lock.wait()
+        }
     }
 }

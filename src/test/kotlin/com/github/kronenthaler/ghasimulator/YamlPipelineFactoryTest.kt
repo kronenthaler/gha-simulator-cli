@@ -58,7 +58,7 @@ class YamlPipelineFactoryTest {
             )
         }
 
-        val mockJobQueue = mockk<JobQueue>()
+        val mockJobQueue = JobQueue(listOf("label1", "label2"))
         val stats = mutableListOf<PipelineStats>()
 
         val result = YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
@@ -119,7 +119,7 @@ class YamlPipelineFactoryTest {
             )
         }
 
-        val mockJobQueue = mockk<JobQueue>()
+        val mockJobQueue = JobQueue(listOf("label1", "label2"))
         val stats = mutableListOf<PipelineStats>()
 
         val result = YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)

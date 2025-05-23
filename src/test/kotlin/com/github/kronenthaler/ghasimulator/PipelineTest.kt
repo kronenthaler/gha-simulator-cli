@@ -108,10 +108,7 @@ class PipelineTest {
         val stats = mutableListOf<PipelineStats>()
         val pipeline = Pipeline("test", jobQueue, stats, listOf(jobA, jobB, jobC, jobD, jobE))
 
-        assertEquals(0, jobQueue.getSize("ubuntu-latest"))
         assertEquals(0, stats.size)
-
-        pipeline.check()
 
         // 2 heads should be scheduled (A + E)
         assertEquals(2, jobQueue.getSize("ubuntu-latest"))
