@@ -12,13 +12,13 @@ class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<
     private val lock = Object()
 
     init {
-        flattenJobs(roots).forEach { job ->
+        flattenJobs().forEach { job ->
             job.parent = this
         }
         check()
     }
 
-    private fun flattenJobs(jobs: List<Job>): List<Job> {
+    private fun flattenJobs(): List<Job> {
         val flatList = mutableSetOf<Job>()
 
         val queue = mutableListOf<Job>()
@@ -34,7 +34,7 @@ class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<
     fun getQueueStats(): QueueStats {
         var totalQueueTime = 0L
 
-        val allJobs = flattenJobs(roots)
+        val allJobs = flattenJobs()
         allJobs.forEach { job ->
             totalQueueTime += job.getQueueTime()
         }
@@ -57,7 +57,7 @@ class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<
         }
 
         // schedule all jobs that are ready to be scheduled
-        flattenJobs(roots)
+        flattenJobs()
             .filter { !it.isScheduled && !it.isCompleted && it.needs.all { it.isCompleted } }
             .forEach { job ->
                 jobQueue.addJob(job)
