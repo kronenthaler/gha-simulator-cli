@@ -1,5 +1,6 @@
-package com.github.kronenthaler.ghasimulator
+package com.github.kronenthaler.ghasimulator.engine
 
+import com.github.kronenthaler.ghasimulator.engine.Pipeline
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -20,8 +21,12 @@ class Job(val name: String, val runningTime: Int, val runsOn: String, val needs:
 
     var endQueueTime: Long = 0
 
+    var parent: Pipeline? = null
+
     fun markAsCompleted() {
         isCompleted = true
+        // inform the pipeline that this job is completed
+        parent?.check()
         logger.log(Level.FINE, "Job $name completed")
     }
 
