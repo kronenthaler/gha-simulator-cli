@@ -27,4 +27,8 @@ class Pipeline(val name: String, val jobQueue: JobQueue, val stats: List<Pipelin
 
         return QueueStats(totalQueueTime, visited.size)
     }
+
+    fun isCompleted(): Boolean {
+        return roots.all { it.isCompleted }
+    }
 }
