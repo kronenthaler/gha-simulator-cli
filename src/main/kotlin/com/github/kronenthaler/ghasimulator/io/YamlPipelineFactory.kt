@@ -6,8 +6,8 @@ import com.github.kronenthaler.ghasimulator.engine.Pipeline
 import org.yaml.snakeyaml.Yaml
 import java.io.File
 
-object YamlPipelineFactory: PipelineFactory {
-    override fun loadFromFile(file: File, jobQueue: JobQueue, stats: MutableList<PipelineStats>): Pipeline {
+class YamlPipelineFactory(val file: File): PipelineFactory {
+    override fun createPipeline(jobQueue: JobQueue, stats: MutableList<PipelineStats>): Pipeline {
         val yaml = Yaml()
         val inputStream = file.inputStream()
         val data = yaml.load<Map<String, Any>>(inputStream)
