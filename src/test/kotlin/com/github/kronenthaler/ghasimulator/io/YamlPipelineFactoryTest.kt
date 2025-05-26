@@ -24,7 +24,7 @@ class YamlPipelineFactoryTest {
         val mockJobQueue = mockk<JobQueue>()
         val stats = mutableListOf<PipelineStats>()
 
-        val result = YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
+        val result = YamlPipelineFactory(tempFile).createPipeline(mockJobQueue, stats)
         Assertions.assertEquals(result.name, tempFile.nameWithoutExtension)
     }
 
@@ -63,7 +63,7 @@ class YamlPipelineFactoryTest {
         val mockJobQueue = JobQueue(listOf("label1", "label2"))
         val stats = mutableListOf<PipelineStats>()
 
-        val result = YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
+        val result = YamlPipelineFactory(tempFile).createPipeline(mockJobQueue, stats)
         Assertions.assertEquals(1, result.roots.size)
 
         val root = result.roots[0]
@@ -124,7 +124,7 @@ class YamlPipelineFactoryTest {
         val mockJobQueue = JobQueue(listOf("label1", "label2"))
         val stats = mutableListOf<PipelineStats>()
 
-        val result = YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
+        val result = YamlPipelineFactory(tempFile).createPipeline(mockJobQueue, stats)
         Assertions.assertEquals(2, result.roots.size)
 
         val A = result.roots[0]
@@ -176,7 +176,7 @@ class YamlPipelineFactoryTest {
         val stats = mutableListOf<PipelineStats>()
 
         val exception = assertThrows<IllegalStateException> {
-            YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
+            YamlPipelineFactory(tempFile).createPipeline(mockJobQueue, stats)
         }
 
         Assertions.assertTrue(exception.message!!.contains("Circular dependency detected for job:"))
@@ -206,7 +206,7 @@ class YamlPipelineFactoryTest {
         val stats = mutableListOf<PipelineStats>()
 
         val exception = assertThrows<IllegalArgumentException> {
-            YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
+            YamlPipelineFactory(tempFile).createPipeline(mockJobQueue, stats)
         }
 
         Assertions.assertTrue(exception.message!!.contains("Job A misses required `time` definition"))
@@ -236,7 +236,7 @@ class YamlPipelineFactoryTest {
         val stats = mutableListOf<PipelineStats>()
 
         val exception = assertThrows<IllegalArgumentException> {
-            YamlPipelineFactory.loadFromFile(tempFile, mockJobQueue, stats)
+            YamlPipelineFactory(tempFile).createPipeline(mockJobQueue, stats)
         }
 
         Assertions.assertTrue(exception.message!!.contains("Job A misses required `runs-on` definition"))

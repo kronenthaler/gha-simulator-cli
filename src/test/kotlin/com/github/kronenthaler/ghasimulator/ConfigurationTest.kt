@@ -18,6 +18,6 @@ class ConfigurationTest {
                 Configuration.RunnerSpec("label1", 3),
                 Configuration.RunnerSpec("label2", 5)
         ));
-        assertEquals(listOf("label1", "label2"), configs.getRunnerLabels());
+        assertEquals(listOf("label1", "label2"), configs.runnerLabels);
     }
 }
