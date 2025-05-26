@@ -1,16 +1,40 @@
 package com.github.kronenthaler.ghasimulator
 
+import com.github.kronenthaler.ghasimulator.engine.*
+import com.github.kronenthaler.ghasimulator.io.IncomingStream
+import com.github.kronenthaler.ghasimulator.stats.PipelineStats
+import java.util.logging.Level
+import java.util.logging.LogManager
+import java.util.logging.Logger
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
-    val name = "Kotlin"
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    println("Hello, " + name + "!")
 
-    for (i in 1..5) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        println("i = $i")
+    val config = Configuration(
+        timescale = 10,
+        runnerSpecs = listOf(
+            Configuration.RunnerSpec("ubuntu-latest", 3),
+        )
+    )
+
+    val pipeline = object : PipelineFactory {
+        override fun createPipeline(jobQueue: JobQueue, stats: MutableList<PipelineStats>): Pipeline {
+            val jobA = Job("a", 10, "ubuntu-latest", emptyList())
+            val jobB = Job("b", 10, "ubuntu-latest", listOf(jobA))
+            val jobC = Job("c", 10, "ubuntu-latest", listOf(jobA))
+            val jobD = Job("d", 10, "ubuntu-latest", listOf(jobB, jobC))
+            val jobE = Job("e", 10, "ubuntu-latest", listOf(jobD))
+            return Pipeline("test", jobQueue, stats, listOf(jobE))
+        }
     }
+
+    val incomingStream = object : IncomingStream {
+        override fun incomingStream(): Iterable<Double> {
+            return listOf(20.0, 20.0, 20.0, 20.0, 20.0)
+        }
+    }
+
+    val scheduler = Scheduler(config)
+    scheduler.simulate(pipeline, incomingStream, System.out)
 }
