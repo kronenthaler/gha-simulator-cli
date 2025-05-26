@@ -12,7 +12,7 @@ import java.util.logging.Logger
 fun main() {
 
     val config = Configuration(
-        timescale = 1000,
+        timescale = 10,
         runnerSpecs = listOf(
             Configuration.RunnerSpec("ubuntu-latest", 3),
         )
@@ -31,7 +31,7 @@ fun main() {
 
     val incomingStream = object : IncomingStream {
         override fun incomingStream(): Iterable<Double> {
-            return listOf(1.0, 1.0, 1.0, 1.0, 1.0)
+            return listOf(20.0, 20.0, 20.0, 20.0, 20.0)
         }
     }
 

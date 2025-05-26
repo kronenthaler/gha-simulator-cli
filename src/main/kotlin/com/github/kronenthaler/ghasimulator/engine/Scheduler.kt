@@ -4,12 +4,18 @@ import com.github.kronenthaler.ghasimulator.Configuration
 import com.github.kronenthaler.ghasimulator.PipelineFactory
 import com.github.kronenthaler.ghasimulator.io.IncomingStream
 import com.github.kronenthaler.ghasimulator.stats.PipelineStats
+import com.github.kronenthaler.ghasimulator.stats.StatsSummary
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.PrintStream
 import java.lang.Thread
 import java.util.Collections
 import java.util.logging.Level
 import java.util.logging.Logger
-import kotlin.concurrent.thread
+
 
 class Scheduler(val config: Configuration) {
     private val logger: Logger = Logger.getLogger(Scheduler::class.java.name)
@@ -33,41 +39,45 @@ class Scheduler(val config: Configuration) {
         }
     }
 
-    fun simulate(pipelineFactory: PipelineFactory, incomingStream: IncomingStream, outputReport: PrintStream) {
+    fun simulate(pipelineFactory: PipelineFactory, incomingStream: IncomingStream, outputReport: PrintStream): StatsSummary {
         // start the runner pool
         startRunnerPool()
 
-        logger.log(Level.INFO, "Simulating")
+        logger.log(Level.INFO, "Simulating...")
 
         val stats = Collections.synchronizedList(mutableListOf<PipelineStats>())
-        val threads = mutableListOf<Thread>()
 
-        val events = incomingStream.incomingStream().iterator()
-        while(events.hasNext()) {
-            val interval = events.next()
+        runBlocking {
+            val threads = mutableListOf<Job>()
 
-            // TODO refactor as coroutines!
-            val thread = thread() {
-                val pipeline = pipelineFactory.createPipeline(jobQueue, stats)
-                pipeline.waitForCompletion()
+            val events = incomingStream.incomingStream().iterator()
+            while (events.hasNext()) {
+                val interval = events.next()
+
+                threads.add(launch(Dispatchers.Default) {
+                    val pipeline = pipelineFactory.createPipeline(jobQueue, stats)
+                    pipeline.waitForCompletion()
+                })
+
+                // wait for the next interval before starting the next pipeline
+                Thread.sleep((interval * config.timescale).toLong())
             }
-            threads.add(thread)
 
-            Thread.sleep((interval * config.timescale).toLong())
+            // wait for all coroutines to complete
+            threads.joinAll()
         }
-
-        // wait for all threads to complete tasks.waitForAll()
-        threads.forEach { it.join() }
-
-        logger.log(Level.INFO,"Done simulating")
-
-        // export report
-        exportReport(stats, outputReport)
 
         // stop the runner pool
         stopRunnerPool()
 
+        logger.log(Level.INFO,"Done simulating.")
+        logger.log(Level.INFO,"Exporting report and calculating stats...")
+
+        // export report
+        exportReport(stats, outputReport)
+
         // return a stat summary object.
+        return StatsSummary(stats, config.timescale)
     }
 
     private fun exportReport(stats: List<PipelineStats>, outputReport: PrintStream) {
