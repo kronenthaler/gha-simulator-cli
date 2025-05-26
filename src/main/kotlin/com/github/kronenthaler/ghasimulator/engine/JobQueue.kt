@@ -12,10 +12,8 @@ class JobQueue(val labels: List<String>) {
         }
     }
 
-    fun getSize(label: String) : Int {
-        synchronized(this) {
-            return queue[label]?.size ?: 0
-        }
+    fun getSize(label: String) : Int = synchronized(this) {
+        return queue[label]?.size ?: 0
     }
 
     fun addJob(job: Job) {

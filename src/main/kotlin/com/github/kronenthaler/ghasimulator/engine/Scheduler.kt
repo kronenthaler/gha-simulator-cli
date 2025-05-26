@@ -28,10 +28,8 @@ class Scheduler(val config: Configuration) {
     }
 
     private fun stopRunnerPool() {
-        runners.values.forEach { runnerList ->
-            runnerList.forEach { runner ->
-                runner.requestToStop()
-            }
+        runners.values.flatten().forEach { runner ->
+            runner.requestToStop()
         }
     }
 

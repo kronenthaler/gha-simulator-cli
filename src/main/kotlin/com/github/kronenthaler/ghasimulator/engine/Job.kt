@@ -24,10 +24,10 @@ class Job(val name: String, val runningTime: Int, val runsOn: String, val needs:
     var parent: Pipeline? = null
 
     fun markAsCompleted() {
+        logger.log(Level.INFO, "Job $name completed")
         isCompleted = true
         // inform the pipeline that this job is completed
         parent?.check()
-        logger.log(Level.FINE, "Job $name completed")
     }
 
     fun getQueueTime(): Long {
