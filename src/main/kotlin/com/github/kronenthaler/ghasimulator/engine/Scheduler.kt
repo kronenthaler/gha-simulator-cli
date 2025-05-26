@@ -2,8 +2,8 @@ package com.github.kronenthaler.ghasimulator.engine
 
 import com.github.kronenthaler.ghasimulator.Configuration
 import com.github.kronenthaler.ghasimulator.PipelineFactory
-import com.github.kronenthaler.ghasimulator.PipelineStats
 import com.github.kronenthaler.ghasimulator.io.IncomingStream
+import com.github.kronenthaler.ghasimulator.stats.PipelineStats
 import java.io.PrintStream
 import java.lang.Thread
 import java.util.Collections
@@ -56,7 +56,7 @@ class Scheduler(val config: Configuration) {
             Thread.sleep((interval * config.timescale).toLong())
         }
 
-        // wait for all threads to complete
+        // wait for all threads to complete tasks.waitForAll()
         threads.forEach { it.join() }
 
         logger.log(Level.INFO,"Done simulating")
