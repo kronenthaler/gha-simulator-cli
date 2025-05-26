@@ -34,7 +34,7 @@ class PipelineTest {
 
         val jobQueue = JobQueue(listOf("ubuntu-latest"))
         val stats = mutableListOf<PipelineStats>()
-        val pipeline = Pipeline("test", jobQueue, stats, listOf(jobA, jobB, jobC, jobD, jobE))
+        val pipeline = Pipeline("test", jobQueue, stats, listOf(jobD))
 
         val queeStats = pipeline.getQueueStats()
 
@@ -52,7 +52,7 @@ class PipelineTest {
 
         val jobQueue = JobQueue(listOf("ubuntu-latest"))
         val stats = mutableListOf<PipelineStats>()
-        val pipeline = Pipeline("test", jobQueue, stats, listOf(jobA, jobB, jobC, jobD, jobE))
+        val pipeline = Pipeline("test", jobQueue, stats, listOf(jobD))
 
         assertFalse(pipeline.isCompleted())
         jobA.markAsCompleted()
@@ -64,10 +64,10 @@ class PipelineTest {
         jobC.markAsCompleted()
 
         assertFalse(pipeline.isCompleted())
-        jobD.markAsCompleted()
+        jobE.markAsCompleted()
 
         assertFalse(pipeline.isCompleted())
-        jobE.markAsCompleted()
+        jobD.markAsCompleted()
 
         assertTrue(pipeline.isCompleted())
     }
@@ -88,7 +88,7 @@ class PipelineTest {
 
         val jobQueue = JobQueue(listOf("ubuntu-latest"))
         val stats = mutableListOf<PipelineStats>()
-        val pipeline = Pipeline("test", jobQueue, stats, listOf(jobA, jobB, jobC, jobD, jobE))
+        val pipeline = Pipeline("test", jobQueue, stats, listOf(jobD))
 
         assertEquals(pipeline, jobA.parent)
         assertEquals(pipeline, jobB.parent)
@@ -107,7 +107,7 @@ class PipelineTest {
 
         val jobQueue = JobQueue(listOf("ubuntu-latest"))
         val stats = mutableListOf<PipelineStats>()
-        val pipeline = Pipeline("test", jobQueue, stats, listOf(jobA, jobB, jobC, jobD, jobE))
+        val pipeline = Pipeline("test", jobQueue, stats, listOf(jobD))
 
         assertEquals(0, stats.size)
 
