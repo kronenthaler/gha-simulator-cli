@@ -1,6 +1,6 @@
 package com.github.kronenthaler.ghasimulator.engine
 
-import com.github.kronenthaler.ghasimulator.PipelineStats
+import com.github.kronenthaler.ghasimulator.stats.PipelineStats
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull

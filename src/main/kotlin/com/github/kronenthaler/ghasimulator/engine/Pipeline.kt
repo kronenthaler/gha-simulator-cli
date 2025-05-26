@@ -1,7 +1,7 @@
 package com.github.kronenthaler.ghasimulator.engine
 
-import com.github.kronenthaler.ghasimulator.PipelineStats
-import com.github.kronenthaler.ghasimulator.QueueStats
+import com.github.kronenthaler.ghasimulator.stats.PipelineStats
+import com.github.kronenthaler.ghasimulator.stats.QueueStats
 import java.util.logging.Logger
 
 class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<PipelineStats>, val roots: List<Job>) {

@@ -1,6 +1,6 @@
 package com.github.kronenthaler.ghasimulator.io
 
-import com.github.kronenthaler.ghasimulator.PipelineStats
+import com.github.kronenthaler.ghasimulator.stats.PipelineStats
 import com.github.kronenthaler.ghasimulator.YamlPipelineFactory
 import com.github.kronenthaler.ghasimulator.engine.JobQueue
 import io.mockk.mockk
