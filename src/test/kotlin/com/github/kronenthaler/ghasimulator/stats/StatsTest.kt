@@ -1,6 +1,5 @@
 package com.github.kronenthaler.ghasimulator.stats
 
-import com.github.kronenthaler.ghasimulator.PipelineStats
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
