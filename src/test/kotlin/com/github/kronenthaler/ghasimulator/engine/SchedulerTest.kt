@@ -4,10 +4,7 @@ import com.github.kronenthaler.ghasimulator.Configuration
 import com.github.kronenthaler.ghasimulator.io.PipelineFactory
 import com.github.kronenthaler.ghasimulator.io.IncomingStream
 import com.github.kronenthaler.ghasimulator.stats.PipelineStats
-import org.junit.jupiter.api.Test
-import io.mockk.spyk
-import org.junit.jupiter.api.Assertions.assertEquals
-import java.io.BufferedReader
+import kotlin.test.*
 import java.io.File
 import java.io.PrintStream
 
@@ -53,6 +50,6 @@ class SchedulerTest {
         val lines = tempFile.inputStream().buffered().bufferedReader().lines().toList()
         assertEquals(6, lines.size)
 
-        System.out.println(summary.formattedSummary())
+        println(summary.formattedSummary())
     }
 }

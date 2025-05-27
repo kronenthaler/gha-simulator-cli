@@ -1,23 +1,19 @@
 package com.github.kronenthaler.ghasimulator.engine
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import kotlin.test.*
 
 class RunnerTest {
     private lateinit var runner: Runner
     private lateinit var queue: JobQueue
 
-    @BeforeEach
+    @BeforeTest
     fun init() {
         queue = JobQueue(listOf("a", "b"))
         runner = Runner(queue, "a", 100)
         runner.start()
     }
 
-    @AfterEach
+    @AfterTest
     fun tearDown() {
         runner.requestToStop()
     }

@@ -1,11 +1,7 @@
 package com.github.kronenthaler.ghasimulator.engine
 
 import com.github.kronenthaler.ghasimulator.stats.PipelineStats
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
+import kotlin.test.*
 
 class PipelineTest {
     @Test

@@ -1,10 +1,10 @@
 package com.github.kronenthaler.ghasimulator.engine
 
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Timeout
+import kotlin.test.*
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 
-@Timeout(5)
+@OptIn(ExperimentalTime::class)
 class JobQueueTest {
     @Test
     fun `test sizes of different labels`() {
@@ -40,7 +40,7 @@ class JobQueueTest {
         val job = Job("build", 10, "a", emptyList())
         queue.addJob(job)
 
-        assertThrows(IllegalArgumentException::class.java) {
+        assertFailsWith<IllegalArgumentException> {
             queue.getJob("c")
         }
     }
@@ -50,7 +50,7 @@ class JobQueueTest {
         val queue = JobQueue(listOf("a", "b"))
         val job = Job("build", 10, "c", emptyList())
 
-        assertThrows(IllegalArgumentException::class.java) {
+        assertFailsWith<IllegalArgumentException> {
             queue.addJob(job)
         }
     }
