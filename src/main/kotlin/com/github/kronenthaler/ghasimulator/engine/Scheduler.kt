@@ -17,32 +17,10 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 
-class Scheduler(val config: Configuration) {
+class Scheduler(val config: Configuration, val jobQueue: JobQueue) {
     private val logger: Logger = Logger.getLogger(Scheduler::class.java.name)
-    private val jobQueue: JobQueue = JobQueue(config.runnerLabels)
-    private val runners: MutableMap<String, MutableList<Runner>> = mutableMapOf()
-
-    private fun startRunnerPool() {
-        config.runnerLabels.forEach { label ->
-            runners[label] = mutableListOf()
-            for (i in 0 until config.getRunnerCount(label)) {
-                val runner = Runner(jobQueue, label, config.timescale)
-                runner.start()
-                runners[label]?.add(runner)
-            }
-        }
-    }
-
-    private fun stopRunnerPool() {
-        runners.values.flatten().forEach { runner ->
-            runner.requestToStop()
-        }
-    }
 
     fun simulate(pipelineFactory: PipelineFactory, incomingStream: IncomingStream, outputReport: PrintStream): StatsSummary {
-        // start the runner pool
-        startRunnerPool()
-
         logger.log(Level.INFO, "Simulating...")
 
         val stats = Collections.synchronizedList(mutableListOf<PipelineStats>())
@@ -66,9 +44,6 @@ class Scheduler(val config: Configuration) {
             // wait for all coroutines to complete
             threads.joinAll()
         }
-
-        // stop the runner pool
-        stopRunnerPool()
 
         logger.log(Level.INFO,"Done simulating.")
         logger.log(Level.INFO,"Exporting report and calculating stats...")

@@ -35,6 +35,12 @@ fun main() {
         }
     }
 
-    val scheduler = Scheduler(config)
+    val jobQueue = JobQueue(config.runnerLabels)
+    val poolManager = RunnerPoolManager(config, jobQueue)
+    poolManager.startRunnerPool()
+
+    val scheduler = Scheduler(config, jobQueue)
     scheduler.simulate(pipeline, incomingStream, System.out)
+
+    poolManager.stopRunnerPool()
 }

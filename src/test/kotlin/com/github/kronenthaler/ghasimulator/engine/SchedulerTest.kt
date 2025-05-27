@@ -41,8 +41,14 @@ class SchedulerTest {
         val tempFile = File.createTempFile("test", ".txt")
         val report = PrintStream(tempFile.outputStream())
 
-        val scheduler = Scheduler(config)
+        val jobQueue = JobQueue(config.runnerLabels)
+        val poolManager = RunnerPoolManager(config, jobQueue)
+        poolManager.startRunnerPool()
+
+        val scheduler = Scheduler(config, jobQueue)
         val summary = scheduler.simulate(pipeline, incomingStream, report)
+
+        poolManager.stopRunnerPool()
 
         val lines = tempFile.inputStream().buffered().bufferedReader().lines().toList()
         assertEquals(6, lines.size)
