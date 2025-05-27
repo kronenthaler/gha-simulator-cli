@@ -33,5 +33,10 @@ class RunnerPoolManagerTest {
         assertEquals(1, jobQueue.getSize("label2"))
 
         poolManager.stopRunnerPool()
+
+        Thread.sleep(3000) // Allow some time for runners to stop
+
+        assertEquals(0, poolManager.getActiveRunners("label1").size)
+        assertEquals(0, poolManager.getActiveRunners("label2").size)
     }
 }

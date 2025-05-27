@@ -9,7 +9,7 @@ class RunnerPoolManager(val config: Configuration, val jobQueue: JobQueue) {
     fun startRunnerPool() {
         config.runnerLabels.forEach { label ->
             runners[label] = mutableListOf()
-            for (i in 0 until config.getRunnerCount(label)) {
+            repeat(config.getRunnerCount(label)) {
                 val runner = Runner(jobQueue, label, config.timescale)
                 runner.start()
                 runners[label]?.add(runner)
@@ -21,5 +21,9 @@ class RunnerPoolManager(val config: Configuration, val jobQueue: JobQueue) {
         runners.values.flatten().forEach { runner ->
             runner.requestToStop()
         }
+    }
+
+    fun getActiveRunners(label: String): List<Runner> {
+        return runners[label]?.filter { it.isAlive } ?: emptyList()
     }
 }
