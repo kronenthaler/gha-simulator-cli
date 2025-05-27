@@ -1,16 +1,34 @@
 package com.github.kronenthaler.ghasimulator
 
+import com.github.ajalt.clikt.core.CliktCommand
 import com.github.kronenthaler.ghasimulator.engine.*
 import com.github.kronenthaler.ghasimulator.io.*
 import com.github.kronenthaler.ghasimulator.stats.PipelineStats
-import java.util.logging.Level
-import java.util.logging.LogManager
-import java.util.logging.Logger
+import java.io.File
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+/// The core simulator class that orchestrates the simulation with the scheduler and pool.
+object CoreSimulator {
+    fun run(configuration: Configuration, pipelineFactory: PipelineFactory, incomingStream: IncomingStream) {
+        val jobQueue = JobQueue(configuration.runnerLabels)
+
+        val poolManager = RunnerPoolManager(configuration, jobQueue)
+        poolManager.startRunnerPool()
+
+        val scheduler = Scheduler(configuration, jobQueue)
+        scheduler.simulate(pipelineFactory, incomingStream, System.out)
+
+        poolManager.stopRunnerPool()
+    }
+}
+
+/// The provides a CLI interface for a simulator that uses YAML as the base configuration format.
+class FileBasedSimulator : CliktCommand() {
+    override fun run() {
+
+    }
+}
+
 fun main() {
-
     val config = Configuration(
         timescale = 10,
         runnerSpecs = listOf(
@@ -43,4 +61,11 @@ fun main() {
     scheduler.simulate(pipeline, incomingStream, System.out)
 
     poolManager.stopRunnerPool()
+
+    val pipelineFactory = Class.forName("com.github.kronenthaler.ghasimulator.io.YamlPipelineFactory")
+                            .getDeclaredConstructor(File::class.java)
+                            .newInstance(File("src/main/resources/pipelines/ghas-pipeline.yaml"))
+                          ?: throw IllegalArgumentException("Failed to load YamlPipelineFactory")
+
+    println("Pipeline factory loaded: $pipelineFactory")
 }
