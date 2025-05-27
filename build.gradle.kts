@@ -15,10 +15,9 @@ repositories {
 
 dependencies {
     implementation("org.yaml:snakeyaml:2.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
 
     testImplementation(kotlin("test"))
-    testImplementation("io.mockk:mockk:1.14.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
 }
 
 tasks.test {
@@ -34,6 +33,7 @@ tasks.test {
         showCauses = true
         showExceptions = true
         showStackTraces = true
+        showStandardStreams = false
     }
 }
 

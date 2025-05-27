@@ -1,7 +1,6 @@
 package com.github.kronenthaler.ghasimulator
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import kotlin.test.*
 
 class ConfigurationTest {
 

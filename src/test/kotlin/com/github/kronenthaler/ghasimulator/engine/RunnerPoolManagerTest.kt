@@ -1,8 +1,7 @@
 package com.github.kronenthaler.ghasimulator.engine
 
 import com.github.kronenthaler.ghasimulator.Configuration
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import kotlin.test.*
 
 class RunnerPoolManagerTest {
     @Test

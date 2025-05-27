@@ -1,8 +1,6 @@
 package com.github.kronenthaler.ghasimulator.stats
 
-import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
-
+import kotlin.test.*
 
 class StatsSummaryTest {
     @Test
