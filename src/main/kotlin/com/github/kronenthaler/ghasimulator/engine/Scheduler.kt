@@ -45,7 +45,6 @@ class Scheduler(val config: Configuration, val jobQueue: JobQueue) {
         // wait for all coroutines to complete
         threads.forEach { it.join() }
 
-
         logger.log(Level.INFO,"Done simulating.")
         logger.log(Level.INFO,"Exporting report and calculating stats...")
 
