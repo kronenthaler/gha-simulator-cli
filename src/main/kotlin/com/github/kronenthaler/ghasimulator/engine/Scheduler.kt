@@ -15,6 +15,7 @@ import java.lang.Thread
 import java.util.Collections
 import java.util.logging.Level
 import java.util.logging.Logger
+import kotlin.concurrent.thread
 
 
 class Scheduler(val config: Configuration, val jobQueue: JobQueue) {
@@ -25,25 +26,25 @@ class Scheduler(val config: Configuration, val jobQueue: JobQueue) {
 
         val stats = Collections.synchronizedList(mutableListOf<PipelineStats>())
 
-        runBlocking {
-            val threads = mutableListOf<Job>()
+        val threads = mutableListOf<Thread>()
 
-            val events = incomingStream.incomingStream().iterator()
-            while (events.hasNext()) {
-                val interval = events.next()
+        val events = incomingStream.incomingStream().iterator()
+        while (events.hasNext()) {
+            val interval = events.next()
 
-                threads.add(launch(Dispatchers.Default) {
-                    val pipeline = pipelineFactory.createPipeline(jobQueue, stats)
-                    pipeline.waitForCompletion()
-                })
-
-                // wait for the next interval before starting the next pipeline
-                Thread.sleep((interval * config.timescale).toLong())
+            val thread = thread(start = true) {
+                val pipeline = pipelineFactory.createPipeline(jobQueue, stats)
+                pipeline.waitForCompletion()
             }
+            threads.add(thread)
 
-            // wait for all coroutines to complete
-            threads.joinAll()
+            // wait for the next interval before starting the next pipeline
+            Thread.sleep((interval * config.timescale).toLong())
         }
+
+        // wait for all coroutines to complete
+        threads.forEach { it.join() }
+
 
         logger.log(Level.INFO,"Done simulating.")
         logger.log(Level.INFO,"Exporting report and calculating stats...")
