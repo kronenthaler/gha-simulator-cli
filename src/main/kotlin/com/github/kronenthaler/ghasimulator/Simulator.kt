@@ -1,7 +1,7 @@
 package com.github.kronenthaler.ghasimulator
 
 import com.github.kronenthaler.ghasimulator.engine.*
-import com.github.kronenthaler.ghasimulator.io.IncomingStream
+import com.github.kronenthaler.ghasimulator.io.*
 import com.github.kronenthaler.ghasimulator.stats.PipelineStats
 import java.util.logging.Level
 import java.util.logging.LogManager

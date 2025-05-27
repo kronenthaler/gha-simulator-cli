@@ -18,7 +18,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
 
     testImplementation(kotlin("test"))
-    testImplementation("io.mockk:mockk:1.14.2")
 }
 
 tasks.test {

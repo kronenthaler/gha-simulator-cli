@@ -2,7 +2,6 @@ package com.github.kronenthaler.ghasimulator.io
 
 import com.github.kronenthaler.ghasimulator.stats.PipelineStats
 import com.github.kronenthaler.ghasimulator.engine.JobQueue
-import io.mockk.mockk
 import kotlin.test.*
 import java.io.File
 import java.io.FileWriter
@@ -18,7 +17,7 @@ class YamlPipelineFactoryTest {
             fileWriter.write("jobs: {}")
         }
 
-        val mockJobQueue = mockk<JobQueue>()
+        val mockJobQueue = JobQueue(listOf("label1", "label2"))
         val stats = mutableListOf<PipelineStats>()
 
         val result = YamlPipelineFactory(tempFile).createPipeline(mockJobQueue, stats)
@@ -169,7 +168,7 @@ class YamlPipelineFactoryTest {
             )
         }
 
-        val mockJobQueue = mockk<JobQueue>()
+        val mockJobQueue = JobQueue(listOf("label1", "label2"))
         val stats = mutableListOf<PipelineStats>()
 
         val exception = assertFailsWith<IllegalStateException> {
@@ -199,7 +198,7 @@ class YamlPipelineFactoryTest {
             )
         }
 
-        val mockJobQueue = mockk<JobQueue>()
+        val mockJobQueue = JobQueue(listOf("label1", "label2"))
         val stats = mutableListOf<PipelineStats>()
 
         val exception = assertFailsWith<IllegalArgumentException> {
@@ -229,7 +228,7 @@ class YamlPipelineFactoryTest {
             )
         }
 
-        val mockJobQueue = mockk<JobQueue>()
+        val mockJobQueue = JobQueue(listOf("label1", "label2"))
         val stats = mutableListOf<PipelineStats>()
 
         val exception = assertFailsWith<IllegalArgumentException> {
