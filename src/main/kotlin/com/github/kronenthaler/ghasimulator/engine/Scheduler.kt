@@ -1,7 +1,7 @@
 package com.github.kronenthaler.ghasimulator.engine
 
 import com.github.kronenthaler.ghasimulator.Configuration
-import com.github.kronenthaler.ghasimulator.PipelineFactory
+import com.github.kronenthaler.ghasimulator.io.PipelineFactory
 import com.github.kronenthaler.ghasimulator.io.IncomingStream
 import com.github.kronenthaler.ghasimulator.stats.PipelineStats
 import com.github.kronenthaler.ghasimulator.stats.StatsSummary

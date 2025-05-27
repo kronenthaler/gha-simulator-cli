@@ -1,4 +1,4 @@
-package com.github.kronenthaler.ghasimulator
+package com.github.kronenthaler.ghasimulator.io
 
 import com.github.kronenthaler.ghasimulator.engine.Job
 import com.github.kronenthaler.ghasimulator.engine.JobQueue
