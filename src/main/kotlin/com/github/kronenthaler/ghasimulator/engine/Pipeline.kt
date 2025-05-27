@@ -2,6 +2,7 @@ package com.github.kronenthaler.ghasimulator.engine
 
 import com.github.kronenthaler.ghasimulator.stats.PipelineStats
 import com.github.kronenthaler.ghasimulator.stats.QueueStats
+import java.util.logging.Level
 import java.util.logging.Logger
 
 class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<PipelineStats>, val roots: List<Job>) {
@@ -51,7 +52,7 @@ class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<
             endTime = System.currentTimeMillis()
             val queueStats = getQueueStats()
             stats.add(PipelineStats(startTime, endTime, queueStats.totalQueuetime, queueStats.jobCount))
-            logger.info("Pipeline $name completed in ${endTime - startTime} ms")
+            logger.log(Level.FINE,"Pipeline $name completed in ${endTime - startTime} ms")
             lock.notifyAll()
             return
         }
