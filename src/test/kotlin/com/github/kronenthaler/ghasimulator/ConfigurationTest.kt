@@ -1,6 +1,7 @@
 package com.github.kronenthaler.ghasimulator
 
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class ConfigurationTest {
 

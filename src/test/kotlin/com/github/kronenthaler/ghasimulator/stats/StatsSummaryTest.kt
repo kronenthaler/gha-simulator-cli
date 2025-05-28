@@ -1,6 +1,7 @@
 package com.github.kronenthaler.ghasimulator.stats
 
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class StatsSummaryTest {
     @Test

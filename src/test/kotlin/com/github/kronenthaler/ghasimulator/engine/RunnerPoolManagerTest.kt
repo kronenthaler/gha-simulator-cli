@@ -1,7 +1,8 @@
 package com.github.kronenthaler.ghasimulator.engine
 
 import com.github.kronenthaler.ghasimulator.Configuration
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class RunnerPoolManagerTest {
     @Test

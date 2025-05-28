@@ -1,8 +1,9 @@
 package com.github.kronenthaler.ghasimulator.io
 
-import kotlin.test.*
 import java.io.File
 import java.io.FileWriter
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class FileIncomingStreamTest {
     @Test

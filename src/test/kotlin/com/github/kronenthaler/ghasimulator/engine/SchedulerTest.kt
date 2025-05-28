@@ -1,12 +1,13 @@
 package com.github.kronenthaler.ghasimulator.engine
 
 import com.github.kronenthaler.ghasimulator.Configuration
-import com.github.kronenthaler.ghasimulator.io.PipelineFactory
 import com.github.kronenthaler.ghasimulator.io.IncomingStream
+import com.github.kronenthaler.ghasimulator.io.PipelineFactory
 import com.github.kronenthaler.ghasimulator.stats.PipelineStats
-import kotlin.test.*
 import java.io.File
 import java.io.PrintStream
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class SchedulerTest {
     @Test
