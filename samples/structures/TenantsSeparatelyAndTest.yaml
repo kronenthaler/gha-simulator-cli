@@ -1,0 +1,71 @@
+name: TenantSeparatelyAndTest
+jobs:
+  build-mp:
+    time: 21
+    runs-on: ios
+    needs: []
+
+  build-twh:
+    time: 21
+    runs-on: ios
+    needs: []
+
+  ui-test-twh-fr:
+    time: 13
+    runs-on: ios
+    needs: [build-mp, build-twh]
+
+  unit-test-twh-fr:
+    time: 7
+    runs-on: ios
+    needs: [build-mp, build-twh]
+
+  unit-test-twh-nl:
+    time: 7
+    runs-on: ios
+    needs: [build-mp, build-twh]
+
+  snapshot-test-twh-nl:
+    time: 8
+    runs-on: ios
+    needs: [build-mp, build-twh]
+
+  ui-test-mp-nl:
+    time: 13
+    runs-on: ios
+    needs: [build-mp, build-twh]
+
+  unit-test-mp-en:
+    time: 7
+    runs-on: ios
+    needs: [build-mp, build-twh]
+
+  unit-test-mp-nl:
+    time: 7
+    runs-on: ios
+    needs: [build-mp, build-twh]
+
+  snapshot-test-mp-nl:
+    time: 8
+    runs-on: ios
+    needs: [build-mp, build-twh]
+
+  modules:
+    time: 18
+    runs-on: ios
+    needs: []
+
+  mp-core:
+    time: 9
+    runs-on: ios
+    needs: []
+
+  sonar:
+    time: 6
+    runs-on: light
+    needs: [mp-core, modules, snapshot-test-mp-nl, unit-test-mp-nl, unit-test-mp-en, ui-test-mp-nl, snapshot-test-twh-nl, unit-test-twh-nl, unit-test-twh-fr, ui-test-twh-fr]
+
+  reporting:
+    time: 1
+    runs-on: small
+    needs: [sonar]

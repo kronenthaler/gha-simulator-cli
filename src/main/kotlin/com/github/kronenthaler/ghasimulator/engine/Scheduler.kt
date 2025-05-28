@@ -1,18 +1,12 @@
 package com.github.kronenthaler.ghasimulator.engine
 
 import com.github.kronenthaler.ghasimulator.Configuration
-import com.github.kronenthaler.ghasimulator.io.PipelineFactory
 import com.github.kronenthaler.ghasimulator.io.IncomingStream
+import com.github.kronenthaler.ghasimulator.io.PipelineFactory
 import com.github.kronenthaler.ghasimulator.stats.PipelineStats
 import com.github.kronenthaler.ghasimulator.stats.StatsSummary
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.PrintStream
-import java.lang.Thread
-import java.util.Collections
+import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 import kotlin.concurrent.thread
@@ -44,7 +38,6 @@ class Scheduler(val config: Configuration, val jobQueue: JobQueue) {
 
         // wait for all coroutines to complete
         threads.forEach { it.join() }
-
 
         logger.log(Level.INFO,"Done simulating.")
         logger.log(Level.INFO,"Exporting report and calculating stats...")

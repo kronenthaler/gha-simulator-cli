@@ -1,0 +1,9 @@
+debug: true
+timescale: 20
+runners:
+  - label: 'ios'
+    count: 14
+  - label: 'light'
+    count: 14
+  - label: 'small'
+    count: 14
