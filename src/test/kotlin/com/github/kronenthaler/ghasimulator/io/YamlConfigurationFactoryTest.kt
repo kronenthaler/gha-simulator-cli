@@ -20,7 +20,7 @@ class YamlConfigurationFactoryTest {
             )
         }
 
-        val configs = YamlConfigurationFactory.loadFromFile(tempFile)
+        val configs = YamlConfigurationFactory(tempFile).createConfiguration()
         assert(configs.timescale == 20)
         assert(configs.runnerSpecs.size == 2)
         assert(configs.runnerSpecs[0].label == "label1")
@@ -47,7 +47,7 @@ class YamlConfigurationFactoryTest {
             )
         }
 
-        val configs = YamlConfigurationFactory.loadFromFile(tempFile)
+        val configs = YamlConfigurationFactory(tempFile).createConfiguration()
         assert(configs.timescale == 25)
         assert(configs.runnerSpecs.size == 2)
         assert(configs.runnerSpecs[0].label == "label1")

@@ -60,7 +60,7 @@ class DefaultSimulator : CliktCommand() {
         .flag(default = false)
 
     override fun run() {
-        val configuration = YamlConfigurationFactory.loadFromFile(configFile)
+        val configuration = YamlConfigurationFactory(configFile).createConfiguration()
         val pipelineFactory = YamlPipelineFactory(pipelineFile)
         val incomingStream = FileIncomingStream(incomingStreamFile)
 
