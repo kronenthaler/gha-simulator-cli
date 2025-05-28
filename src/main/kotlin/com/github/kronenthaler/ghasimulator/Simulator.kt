@@ -45,7 +45,7 @@ object CoreSimulator {
     }
 }
 
-/// The provides a CLI interface for a simulator that uses YAML as the base configuration format.
+/// Provides a CLI interface for a simulator that uses YAML as the base configuration format.
 class DefaultSimulator : CliktCommand() {
     val configFile: File by argument("configurationFile", help = "Path to the YAML configuration file.")
         .file(mustExist = true, mustBeReadable = true)
@@ -59,10 +59,6 @@ class DefaultSimulator : CliktCommand() {
         .default(System.out)
     val printSummary: Boolean by option("-p", "--print-stats", help = "Print stats summary to console.")
         .flag(default = false)
-    val logLevel: String by option("--log-level", help = "Set the log level (e.g., WARN, INFO, FINE, FINER, FINEST).")
-        .choice("OFF", "SEVERE", "WARNING", "INFO", "CONFIG", "FINE", "FINER", "FINEST")
-        .convert { it.uppercase() }
-        .default("INFO")
 
     override fun run() {
         val configuration = YamlConfigurationFactory.loadFromFile(configFile)
@@ -74,11 +70,3 @@ class DefaultSimulator : CliktCommand() {
 }
 
 fun main(args: Array<String>) = DefaultSimulator().main(args)
-
-//    val pipelineFactory = Class.forName("com.github.kronenthaler.ghasimulator.io.YamlPipelineFactory")
-//                            .getDeclaredConstructor(File::class.java)
-//                            .newInstance(File("src/main/resources/pipelines/ghas-pipeline.yaml"))
-//                          ?: throw IllegalArgumentException("Failed to load YamlPipelineFactory")
-//
-//    println("Pipeline factory loaded: $pipelineFactory")
-//}
