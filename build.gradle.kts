@@ -15,7 +15,6 @@ repositories {
 
 dependencies {
     implementation("org.yaml:snakeyaml:2.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     implementation("com.github.ajalt.clikt:clikt:5.0.3")
 
     testImplementation(kotlin("test"))
