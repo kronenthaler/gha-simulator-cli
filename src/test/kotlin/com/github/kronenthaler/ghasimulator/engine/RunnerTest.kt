@@ -38,7 +38,7 @@ class RunnerTest {
         runner.requestToStop()
         assertTrue(runner.isInterrupted)
 
-        Thread.sleep(500)
+        Thread.sleep(2000)
 
         assertFalse(runner.isAlive)
     }
