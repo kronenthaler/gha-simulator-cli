@@ -7,7 +7,7 @@ import com.github.kronenthaler.ghasimulator.stats.PipelineStats
 import org.yaml.snakeyaml.Yaml
 import java.io.File
 
-class YamlPipelineFactory(val file: File): PipelineFactory {
+class YamlPipelineFactory(val file: File) : PipelineFactory {
     private val roots: List<Job>
     private val pipelineName: String
 
@@ -37,7 +37,12 @@ class YamlPipelineFactory(val file: File): PipelineFactory {
         return Pipeline(pipelineName, jobQueue, stats, roots.map { it.clone() })
     }
 
-    private fun resolveJob(jobName: String, jobs: Map<String, Map<String, Any>>, jobsCache: MutableMap<String, Job>, jobsInProgress: MutableSet<String>): Job {
+    private fun resolveJob(
+        jobName: String,
+        jobs: Map<String, Map<String, Any>>,
+        jobsCache: MutableMap<String, Job>,
+        jobsInProgress: MutableSet<String>
+    ): Job {
         if (jobsCache.containsKey(jobName)) {
             return jobsCache[jobName]
                 ?: throw IllegalStateException("Job $jobName not found in cache")
@@ -51,8 +56,10 @@ class YamlPipelineFactory(val file: File): PipelineFactory {
         jobsInProgress.add(jobName)
 
         val job = jobs[jobName] ?: throw IllegalArgumentException("Job $jobName not found in YAML")
-        val runningTime = job["time"] as? Int ?: throw IllegalArgumentException("Job $jobName misses required `time` definition")
-        val runsOn = job["runs-on"] as? String ?: throw IllegalArgumentException("Job $jobName misses required `runs-on` definition")
+        val runningTime =
+            job["time"] as? Int ?: throw IllegalArgumentException("Job $jobName misses required `time` definition")
+        val runsOn = job["runs-on"] as? String
+            ?: throw IllegalArgumentException("Job $jobName misses required `runs-on` definition")
         val needs = job["needs"] as? List<String> ?: emptyList()
 
         // resolve dependencies

@@ -15,7 +15,11 @@ import kotlin.concurrent.thread
 class Scheduler(val config: Configuration, val jobQueue: JobQueue) {
     private val logger: Logger = Logger.getLogger(Scheduler::class.java.name)
 
-    fun simulate(pipelineFactory: PipelineFactory, incomingStream: IncomingStream, outputReport: PrintStream): StatsSummary {
+    fun simulate(
+        pipelineFactory: PipelineFactory,
+        incomingStream: IncomingStream,
+        outputReport: PrintStream
+    ): StatsSummary {
         logger.log(Level.INFO, "Simulating...")
 
         val stats = Collections.synchronizedList(mutableListOf<PipelineStats>())
@@ -39,8 +43,8 @@ class Scheduler(val config: Configuration, val jobQueue: JobQueue) {
         // wait for all coroutines to complete
         threads.forEach { it.join() }
 
-        logger.log(Level.INFO,"Done simulating.")
-        logger.log(Level.INFO,"Exporting report and calculating stats...")
+        logger.log(Level.INFO, "Done simulating.")
+        logger.log(Level.INFO, "Exporting report and calculating stats...")
 
         // export report
         exportReport(stats, outputReport)
@@ -50,7 +54,7 @@ class Scheduler(val config: Configuration, val jobQueue: JobQueue) {
     }
 
     private fun exportReport(stats: List<PipelineStats>, outputReport: PrintStream) {
-        outputReport.println("Run (m)\tStart (ms)\tEnd (ms)\tQueue (m)\tJobs");
+        outputReport.println("Run (m)\tStart (ms)\tEnd (ms)\tQueue (m)\tJobs")
         stats.forEach { stat ->
             outputReport.println(stat.toString(config.timescale))
         }

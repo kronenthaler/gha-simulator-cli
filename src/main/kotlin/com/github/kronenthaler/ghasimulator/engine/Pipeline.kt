@@ -52,7 +52,7 @@ class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<
             endTime = System.currentTimeMillis()
             val queueStats = getQueueStats()
             stats.add(PipelineStats(startTime, endTime, queueStats.totalQueuetime, queueStats.jobCount))
-            logger.log(Level.FINE,"Pipeline $name completed in ${endTime - startTime} ms")
+            logger.log(Level.FINE, "Pipeline $name completed in ${endTime - startTime} ms")
             lock.notifyAll()
             return
         }

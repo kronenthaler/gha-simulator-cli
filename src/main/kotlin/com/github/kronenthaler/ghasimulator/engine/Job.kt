@@ -3,7 +3,7 @@ package com.github.kronenthaler.ghasimulator.engine
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class Job(val name: String, val runningTime: Int, val runsOn: String, val needs: List<Job>): Cloneable {
+class Job(val name: String, val runningTime: Int, val runsOn: String, val needs: List<Job>) : Cloneable {
     private val logger: Logger = Logger.getLogger(Job::class.java.name)
 
     var isCompleted: Boolean = false
@@ -33,5 +33,5 @@ class Job(val name: String, val runningTime: Int, val runsOn: String, val needs:
         return endQueueTime - startQueueTime
     }
 
-    override public fun clone(): Job = Job(name, runningTime, runsOn, needs.map { it.clone() })
+    public override fun clone(): Job = Job(name, runningTime, runsOn, needs.map { it.clone() })
 }

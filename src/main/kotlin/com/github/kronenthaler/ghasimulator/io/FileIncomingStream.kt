@@ -2,7 +2,7 @@ package com.github.kronenthaler.ghasimulator.io
 
 import java.io.File
 
-class FileIncomingStream(val file: File): IncomingStream {
+class FileIncomingStream(val file: File) : IncomingStream {
     override fun incomingStream(): Iterable<Double> {
         return file.readLines()
             .asSequence()

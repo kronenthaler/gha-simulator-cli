@@ -4,7 +4,7 @@ import com.github.kronenthaler.ghasimulator.Configuration
 import org.yaml.snakeyaml.Yaml
 import java.io.File
 
-object YamlConfigurationFactory: ConfigurationFactory {
+object YamlConfigurationFactory : ConfigurationFactory {
     override fun loadFromFile(file: File): Configuration {
         val yaml = Yaml()
         val inputStream = file.inputStream()
