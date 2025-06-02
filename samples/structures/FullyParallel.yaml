@@ -1,44 +1,34 @@
-name: IndependentBuildAndTestPerTenant
+name: FullyParallel
 jobs:
-  build-a:
-    time: 21
-    runs-on: ios
-    needs: []
-
-  build-b:
-    time: 21
-    runs-on: ios
-    needs: []
-
   ui-test-b:
-    time: 13
+    time: 23
     runs-on: ios
-    needs: [build-b]
+    needs: []
 
   unit-test-b:
-    time: 7
+    time: 17
     runs-on: ios
-    needs: [build-b]
+    needs: []
 
   snapshot-test-b:
-    time: 8
+    time: 14
     runs-on: ios
-    needs: [build-b]
+    needs: []
 
   ui-test-a:
-    time: 13
+    time: 23
     runs-on: ios
-    needs: [build-a]
+    needs: []
 
   unit-test-a:
-    time: 7
+    time: 17
     runs-on: ios
-    needs: [build-a]
+    needs: []
 
   snapshot-test-a:
-    time: 8
+    time: 14
     runs-on: ios
-    needs: [build-a]
+    needs: []
 
   modules:
     time: 18
