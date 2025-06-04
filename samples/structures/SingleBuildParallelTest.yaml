@@ -40,7 +40,12 @@ jobs:
     runs-on: ios
     needs: [build]
 
-  sonar:
-    time: 7
+  quality:
+    time: 6
     runs-on: linux
-    needs: [modules, snapshot-test-a, unit-test-a, ui-test-a, snapshot-test-b, unit-test-b, ui-test-b]
+    needs: [ modules, snapshot-test-a, unit-test-a, ui-test-a, snapshot-test-b, unit-test-b, ui-test-b ]
+
+  reporting:
+    time: 1
+    runs-on: linux
+    needs: [ quality ]
