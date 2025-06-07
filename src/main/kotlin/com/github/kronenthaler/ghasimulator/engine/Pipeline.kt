@@ -19,7 +19,14 @@ class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<
         check()
     }
 
+    private lateinit var jobs: List<Job>
+
+    // memoize flattend jobs to avoid recalculating them multiple times
     private fun flattenJobs(): List<Job> {
+        if (::jobs.isInitialized) {
+            return jobs
+        }
+
         val flatList = mutableSetOf<Job>()
 
         val queue = mutableListOf<Job>()
@@ -29,7 +36,8 @@ class Pipeline(val name: String, val jobQueue: JobQueue, val stats: MutableList<
             flatList.add(current)
             queue.addAll(current.needs)
         }
-        return flatList.toList()
+        jobs = flatList.toList()
+        return jobs
     }
 
     fun getQueueStats(): QueueStats {

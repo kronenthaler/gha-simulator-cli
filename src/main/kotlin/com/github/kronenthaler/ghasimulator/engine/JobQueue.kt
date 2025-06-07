@@ -18,8 +18,8 @@ class JobQueue(val labels: List<String>) {
 
     fun addJob(job: Job) {
         queue[job.runsOn]?.let { it ->
-            it.put(job)
             job.startQueueTime = System.currentTimeMillis()
+            it.put(job)
         } ?: throw IllegalArgumentException("Label ${job.runsOn} not found")
     }
 

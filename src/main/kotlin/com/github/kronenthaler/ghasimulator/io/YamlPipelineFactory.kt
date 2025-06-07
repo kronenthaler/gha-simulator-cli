@@ -8,10 +8,8 @@ import org.yaml.snakeyaml.Yaml
 import java.io.File
 
 class YamlPipelineFactory(val file: File) : PipelineFactory {
-    private val roots: List<Job>
-    private val pipelineName: String
 
-    init {
+    override fun createPipeline(jobQueue: JobQueue, stats: MutableList<PipelineStats>): Pipeline {
         val yaml = Yaml()
         val inputStream = file.inputStream()
         val data = yaml.load<Map<String, Any>>(inputStream)
@@ -29,12 +27,10 @@ class YamlPipelineFactory(val file: File) : PipelineFactory {
         val allJobs = jobsCache.values.map { it.name }.toSet()
         val rootNames = allJobs - isDependentOn // all jobs that are not depended on
 
-        pipelineName = data["name"] as? String ?: file.nameWithoutExtension
-        roots = jobsCache.values.filter { rootNames.contains(it.name) }.toList()
-    }
+        val pipelineName = data["name"] as? String ?: file.nameWithoutExtension
+        val roots = jobsCache.values.filter { rootNames.contains(it.name) }.toList()
 
-    override fun createPipeline(jobQueue: JobQueue, stats: MutableList<PipelineStats>): Pipeline {
-        return Pipeline(pipelineName, jobQueue, stats, roots.map { it.clone() })
+        return Pipeline(pipelineName, jobQueue, stats, roots)
     }
 
     private fun resolveJob(
