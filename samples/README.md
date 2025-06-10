@@ -89,3 +89,15 @@ for structure in $(find structures -name '*.yaml'); do;
     incoming.txt
 done
 ```
+
+
+## Sample results
+
+### Run time (in min)
+
+|structure|avg|stdev|pc50|pc75|min|max|
+|---------|---|-----|----|----|---|---|
+|FullyParallel|36.61|11.07|31|39|30|98|
+|SingleBuildParallelTest|52.36|4.44|50|54|49|77|
+|TenantSeparatelyAndTest|45.57|8.25|42|47|41|89|
+|IndependentBuildAndTestPerTenant|45.79|8.13|42|47|41|92|
