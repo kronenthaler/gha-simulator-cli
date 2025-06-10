@@ -79,4 +79,9 @@ With this data, you can run any statistical analysis your heart desires.
 ## Limitations
 
 * Job's `runs-on` are treated as a single label
-* Pipeline yaml definition format is based on the GHA format. However, does not support strategy matrix definitions.
+* Pipeline's yaml definition format is loosely based on the GHA format. However, does not support strategy matrix definitions.
+* Pipeline's structure is static and known up-front. It does not support conditional jobs, or the like.
+
+## Samples and analysis
+
+If you are new to queue theory the sample folder contains a good starting point of how to configure your simulation, how to interpret some of the results, at a basic level at least.
