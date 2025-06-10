@@ -24,7 +24,8 @@ class StatsSummary(val stats: List<PipelineStats>, val timescale: Int) {
                 "pc75",
                 "min",
                 "max"
-            ))
+            )
+        )
         result.append(formattedStats("Run Time", runTimes))
         result.append(formattedStats("Queue Time", queueTimes))
 

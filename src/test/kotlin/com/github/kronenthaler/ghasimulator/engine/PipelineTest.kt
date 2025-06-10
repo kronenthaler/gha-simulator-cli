@@ -35,7 +35,7 @@ class PipelineTest {
         val queeStats = pipeline.getQueueStats()
 
         assertEquals(5, queeStats.jobCount)
-        assertEquals(10+10+10+10+15, queeStats.totalQueuetime)
+        assertEquals(10 + 10 + 10 + 10 + 15, queeStats.totalQueuetime)
     }
 
     @Test

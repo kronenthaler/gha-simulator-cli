@@ -1,10 +1,9 @@
 package com.github.kronenthaler.ghasimulator.engine
 
-import com.github.kronenthaler.ghasimulator.engine.Pipeline
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class Job(val name: String, val runningTime: Int, val runsOn: String, val needs: List<Job>) {
+class Job(val name: String, val runningTime: Int, val runsOn: String, val needs: List<Job>) : Cloneable {
     private val logger: Logger = Logger.getLogger(Job::class.java.name)
 
     var isCompleted: Boolean = false
@@ -24,7 +23,7 @@ class Job(val name: String, val runningTime: Int, val runsOn: String, val needs:
     var parent: Pipeline? = null
 
     fun markAsCompleted() {
-        logger.log(Level.FINE, "Job $name completed")
+        logger.log(Level.FINER, "Job $name completed")
         isCompleted = true
         // inform the pipeline that this job is completed
         parent?.check()
@@ -33,4 +32,6 @@ class Job(val name: String, val runningTime: Int, val runsOn: String, val needs:
     fun getQueueTime(): Long {
         return endQueueTime - startQueueTime
     }
+
+    public override fun clone(): Job = Job(name, runningTime, runsOn, needs.map { it.clone() })
 }

@@ -1,0 +1,7 @@
+@startebnf
+
+tenant-build-parallel-test = (modules | (build-a | build-b),
+    (snapshot-tests-a | unit-tests-a | ui-tests-a |
+    snapshot-tests-b | unit-tests-b | ui-tests-b)), quality, reporting;
+
+@endebnf

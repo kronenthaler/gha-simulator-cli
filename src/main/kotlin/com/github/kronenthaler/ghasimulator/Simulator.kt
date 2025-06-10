@@ -7,15 +7,14 @@ import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
-import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.outputStream
-import com.github.kronenthaler.ghasimulator.engine.*
+import com.github.kronenthaler.ghasimulator.engine.JobQueue
+import com.github.kronenthaler.ghasimulator.engine.RunnerPoolManager
+import com.github.kronenthaler.ghasimulator.engine.Scheduler
 import com.github.kronenthaler.ghasimulator.io.*
-import com.github.kronenthaler.ghasimulator.stats.PipelineStats
 import java.io.File
 import java.io.PrintStream
-import java.util.logging.LogManager
 
 /// The core simulator class that orchestrates the simulation with the scheduler and pool.
 object CoreSimulator {
@@ -61,7 +60,7 @@ class DefaultSimulator : CliktCommand() {
         .flag(default = false)
 
     override fun run() {
-        val configuration = YamlConfigurationFactory.loadFromFile(configFile)
+        val configuration = YamlConfigurationFactory(configFile).createConfiguration()
         val pipelineFactory = YamlPipelineFactory(pipelineFile)
         val incomingStream = FileIncomingStream(incomingStreamFile)
 

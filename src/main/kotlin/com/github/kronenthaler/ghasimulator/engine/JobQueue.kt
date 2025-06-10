@@ -12,18 +12,18 @@ class JobQueue(val labels: List<String>) {
         }
     }
 
-    fun getSize(label: String) : Int = synchronized(this) {
+    fun getSize(label: String): Int = synchronized(this) {
         return queue[label]?.size ?: 0
     }
 
     fun addJob(job: Job) {
         queue[job.runsOn]?.let { it ->
-            it.put(job)
             job.startQueueTime = System.currentTimeMillis()
+            it.put(job)
         } ?: throw IllegalArgumentException("Label ${job.runsOn} not found")
     }
 
-    fun getJob(label: String) : Job {
+    fun getJob(label: String): Job {
         queue[label]?.let { it ->
             var job = it.take()
             job.endQueueTime = System.currentTimeMillis()

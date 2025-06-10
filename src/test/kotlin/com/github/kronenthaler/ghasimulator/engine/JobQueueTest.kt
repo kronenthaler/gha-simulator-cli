@@ -1,7 +1,9 @@
 package com.github.kronenthaler.ghasimulator.engine
 
-import kotlin.test.*
-import kotlin.time.Duration.Companion.seconds
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertNotEquals
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)

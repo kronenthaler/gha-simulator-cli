@@ -5,42 +5,32 @@ jobs:
     runs-on: ios
     needs: []
 
-  ui-test-twh-fr:
+  ui-test-b:
     time: 13
     runs-on: ios
     needs: [build]
 
-  unit-test-twh-fr:
+  unit-test-b:
     time: 7
     runs-on: ios
     needs: [build]
 
-  unit-test-twh-nl:
-    time: 7
-    runs-on: ios
-    needs: [build]
-
-  snapshot-test-twh-nl:
+  snapshot-test-b:
     time: 8
     runs-on: ios
     needs: [build]
 
-  ui-test-mp-nl:
+  ui-test-a:
     time: 13
     runs-on: ios
     needs: [build]
 
-  unit-test-mp-en:
+  unit-test-a:
     time: 7
     runs-on: ios
     needs: [build]
 
-  unit-test-mp-nl:
-    time: 7
-    runs-on: ios
-    needs: [build]
-
-  snapshot-test-mp-nl:
+  snapshot-test-a:
     time: 8
     runs-on: ios
     needs: [build]
@@ -50,17 +40,12 @@ jobs:
     runs-on: ios
     needs: [build]
 
-  mp-core:
-    time: 9
-    runs-on: ios
-    needs: []
-
-  sonar:
+  quality:
     time: 6
-    runs-on: light
-    needs: [mp-core, modules, snapshot-test-mp-nl, unit-test-mp-nl, unit-test-mp-en, ui-test-mp-nl, snapshot-test-twh-nl, unit-test-twh-nl, unit-test-twh-fr, ui-test-twh-fr]
+    runs-on: linux
+    needs: [ modules, snapshot-test-a, unit-test-a, ui-test-a, snapshot-test-b, unit-test-b, ui-test-b ]
 
   reporting:
     time: 1
-    runs-on: small
-    needs: [sonar]
+    runs-on: linux
+    needs: [ quality ]

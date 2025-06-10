@@ -1,0 +1,8 @@
+@startebnf
+
+independent-tenant-build-and-test-parallel = (modules |
+    ((build-a, (snapshot-tests-a | unit-tests-a | ui-tests-a))) |
+    (build-b, (snapshot-tests-b | unit-tests-b | ui-tests-b)))
+    , quality, reporting;
+
+@endebnf

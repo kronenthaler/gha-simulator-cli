@@ -7,13 +7,13 @@ import com.github.kronenthaler.ghasimulator.stats.PipelineStats
 import org.yaml.snakeyaml.Yaml
 import java.io.File
 
-class YamlPipelineFactory(val file: File): PipelineFactory {
+class YamlPipelineFactory(val file: File) : PipelineFactory {
+
     override fun createPipeline(jobQueue: JobQueue, stats: MutableList<PipelineStats>): Pipeline {
         val yaml = Yaml()
         val inputStream = file.inputStream()
         val data = yaml.load<Map<String, Any>>(inputStream)
 
-        val pipelineName = data["name"] as? String ?: file.nameWithoutExtension
         val jobs = data["jobs"] as? Map<String, Map<String, Any>> ?: emptyMap()
 
         val jobsCache = mutableMapOf<String, Job>()
@@ -26,12 +26,19 @@ class YamlPipelineFactory(val file: File): PipelineFactory {
         val isDependentOn = jobsCache.values.map { it.needs.map { it.name } }.flatten().toSet()
         val allJobs = jobsCache.values.map { it.name }.toSet()
         val rootNames = allJobs - isDependentOn // all jobs that are not depended on
+
+        val pipelineName = data["name"] as? String ?: file.nameWithoutExtension
         val roots = jobsCache.values.filter { rootNames.contains(it.name) }.toList()
 
         return Pipeline(pipelineName, jobQueue, stats, roots)
     }
 
-    private fun resolveJob(jobName: String, jobs: Map<String, Map<String, Any>>, jobsCache: MutableMap<String, Job>, jobsInProgress: MutableSet<String>): Job {
+    private fun resolveJob(
+        jobName: String,
+        jobs: Map<String, Map<String, Any>>,
+        jobsCache: MutableMap<String, Job>,
+        jobsInProgress: MutableSet<String>
+    ): Job {
         if (jobsCache.containsKey(jobName)) {
             return jobsCache[jobName]
                 ?: throw IllegalStateException("Job $jobName not found in cache")
@@ -45,8 +52,10 @@ class YamlPipelineFactory(val file: File): PipelineFactory {
         jobsInProgress.add(jobName)
 
         val job = jobs[jobName] ?: throw IllegalArgumentException("Job $jobName not found in YAML")
-        val runningTime = job["time"] as? Int ?: throw IllegalArgumentException("Job $jobName misses required `time` definition")
-        val runsOn = job["runs-on"] as? String ?: throw IllegalArgumentException("Job $jobName misses required `runs-on` definition")
+        val runningTime =
+            job["time"] as? Int ?: throw IllegalArgumentException("Job $jobName misses required `time` definition")
+        val runsOn = job["runs-on"] as? String
+            ?: throw IllegalArgumentException("Job $jobName misses required `runs-on` definition")
         val needs = job["needs"] as? List<String> ?: emptyList()
 
         // resolve dependencies

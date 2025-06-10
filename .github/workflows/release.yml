@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt-openj9'
+          java-version: '23.0.2'
+
+      - name: Build for distribution
+        run: ./gradlew assembleDist
+
+      - name: Generate changelog from previous version
+        run: |
+          git log --oneline --format=%s main..cli | grep -e '^\(feat\|fix\|refactor\|chore\):' || echo "minor fixes" > CHANGELOG.md
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            build/distributions/*.zip
+            build/libs/*.jar
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          body_path: CHANGELOG.md
+          files: build/distributions/*.zip

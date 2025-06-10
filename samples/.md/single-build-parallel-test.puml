@@ -1,0 +1,10 @@
+@startebnf
+
+single-build-parallel-test = (build-all-tests,
+    (modules |
+    snapshot-tests-a | unit-tests-a | ui-tests-a |
+    snapshot-tests-b | unit-tests-b | ui-tests-b
+    )),
+    quality, reporting;
+
+@endebnf

@@ -1,9 +1,6 @@
-debug: true
 timescale: 20
 runners:
   - label: 'ios'
-    count: 14
-  - label: 'light'
-    count: 14
-  - label: 'small'
-    count: 14
+    count: 10
+  - label: 'linux'
+    count: 10
