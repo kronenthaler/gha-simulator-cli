@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.github.kronenthaler.gha-simulator"
-version = "0.0.1"
+version = "1.0.0"
 
 repositories {
     mavenCentral()

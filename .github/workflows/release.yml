@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up java
         uses: actions/setup-java@v4
@@ -22,8 +24,13 @@ jobs:
         run: ./gradlew assembleDist
 
       - name: Generate changelog from previous version
+        if: github.ref_type == 'tag'
+        shell: bash -xeuo pipefail {0}
         run: |
-          git log --oneline --format=%s main..cli | grep -e '^\(feat\|fix\|refactor\|chore\):' || echo "minor fixes" > CHANGELOG.md
+          git fetch --tags --force
+          current_release="${{ github.ref_name }}"
+          prev_release=$((git tag | grep -e "^[0-9]*\.[0-9]*\.[0-9]*$" | grep -v "${current_release}" | sort --version-sort | tail -n1) || echo "main")
+          (git log --oneline --format=%s ${prev_release}..${current_release} | grep -e '^\(feat\|fix\|refactor\|chore\):' || echo "minor fixes") > CHANGELOG.md
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
@@ -39,3 +46,4 @@ jobs:
         with:
           body_path: CHANGELOG.md
           files: build/distributions/*.zip
+          token: ${{ secrets.RELEASE_TOKEN }}
