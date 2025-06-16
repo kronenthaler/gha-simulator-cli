@@ -51,7 +51,7 @@ jobs:
           -Dsonar.organization=kronenthaler
           -Dsonar.projectKey=kronenthaler_gha-simulator-cli
           -Dsonar.projectName=gha-simulator-cli
-          -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/kover/xml/report.xml
+          -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/kover/xml/
           -Dsonar.sources=src/main/
           -Dsonar.tests=src/test/
           -Dsonar.verbose=true
@@ -72,7 +72,7 @@ jobs:
           -Dsonar.organization=kronenthaler
           -Dsonar.projectKey=kronenthaler_gha-simulator-cli
           -Dsonar.projectName=gha-simulator-cli
-          -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/kover/xml/report.xml
+          -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/kover/xml/
           -Dsonar.sources=src/main/
           -Dsonar.tests=src/test/
           -Dsonar.verbose=true
