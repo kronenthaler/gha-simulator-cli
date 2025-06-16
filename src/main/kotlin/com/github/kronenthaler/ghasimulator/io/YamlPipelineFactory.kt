@@ -18,7 +18,7 @@ class YamlPipelineFactory(val file: File) : PipelineFactory {
 
         val jobsCache = mutableMapOf<String, Job>()
         val jobsInProgress = mutableSetOf<String>()
-        jobs.forEach { name, jobData ->
+        jobs.forEach { name, _ ->
             resolveJob(name, jobs, jobsCache, jobsInProgress)
         }
 
@@ -44,8 +44,8 @@ class YamlPipelineFactory(val file: File) : PipelineFactory {
                 ?: throw IllegalStateException("Job $jobName not found in cache")
         }
 
-        if (jobsInProgress.contains(jobName)) {
-            throw IllegalStateException("Circular dependency detected for job: $jobName")
+        check(!jobsInProgress.contains(jobName)) {
+            "Circular dependency detected for job: $jobName"
         }
 
         // mark job as resolving
@@ -56,7 +56,7 @@ class YamlPipelineFactory(val file: File) : PipelineFactory {
             job["time"] as? Int ?: throw IllegalArgumentException("Job $jobName misses required `time` definition")
         val runsOn = job["runs-on"] as? String
             ?: throw IllegalArgumentException("Job $jobName misses required `runs-on` definition")
-        val needs = job["needs"] as? List<String> ?: emptyList()
+        val needs = (job["needs"] as? List<String>) ?: emptyList()
 
         // resolve dependencies
         val resolvedNeeds = mutableListOf<Job>()

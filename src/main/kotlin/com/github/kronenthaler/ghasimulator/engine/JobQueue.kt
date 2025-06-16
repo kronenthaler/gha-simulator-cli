@@ -17,15 +17,15 @@ class JobQueue(val labels: List<String>) {
     }
 
     fun addJob(job: Job) {
-        queue[job.runsOn]?.let { it ->
+        queue[job.runsOn]?.let { queue ->
             job.startQueueTime = System.currentTimeMillis()
-            it.put(job)
+            queue.put(job)
         } ?: throw IllegalArgumentException("Label ${job.runsOn} not found")
     }
 
     fun getJob(label: String): Job {
-        queue[label]?.let { it ->
-            var job = it.take()
+        queue[label]?.let { queue ->
+            var job = queue.take()
             job.endQueueTime = System.currentTimeMillis()
             return job
         } ?: throw IllegalArgumentException("Label $label not found")

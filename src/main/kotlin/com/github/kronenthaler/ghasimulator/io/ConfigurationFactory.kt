@@ -1,8 +1,7 @@
 package com.github.kronenthaler.ghasimulator.io
 
 import com.github.kronenthaler.ghasimulator.Configuration
-import java.io.File
 
-interface ConfigurationFactory {
+fun interface ConfigurationFactory {
     fun createConfiguration() : Configuration
 }
