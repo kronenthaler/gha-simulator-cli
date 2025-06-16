@@ -24,10 +24,6 @@ jobs:
         distribution: 'adopt-openj9'
         java-version: '23.0.2'
 
-    - name: Get Version
-      run: |
-        echo "VERSION=$(cat build.gradle.kts| grep 'version = ' | sed -e 's/.*"\(.*\)".*/\1/g')" >> $GITHUB_ENV
-
     - name: Test
       run: ./gradlew test koverXmlReport
 
@@ -44,7 +40,7 @@ jobs:
       if: github.event_name == 'pull_request'
       with:
         args: >
-          -Dsonar.projectVersion=${{ env.VERSION }}
+          -Dsonar.projectVersion=${{ github.sha }}
           -Dsonar.pullrequest.key=${{ github.event.number }}
           -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }}
           -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref  }}
@@ -67,7 +63,7 @@ jobs:
       if: github.event_name == 'push'
       with:
         args: >
-          -Dsonar.projectVersion=${{ env.VERSION }}
+          -Dsonar.projectVersion=${{ github.sha }}
           -Dsonar.branch.name=${{ github.ref_name }}
           -Dsonar.organization=kronenthaler
           -Dsonar.projectKey=kronenthaler_gha-simulator-cli
