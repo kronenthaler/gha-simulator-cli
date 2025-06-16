@@ -10,6 +10,7 @@ jobs:
   test:
     name: Run tests
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -20,8 +21,12 @@ jobs:
         distribution: 'adopt-openj9'
         java-version: '23.0.2'
 
+    - name: Get Version
+      run: |
+        echo "VERSION=$(cat build.gradle.kts| grep 'version = ' | sed -e 's/.*"\(.*\)".*/\1/g')" >> $GITHUB_ENV
+
     - name: Test
-      run: ./gradlew test
+      run: ./gradlew test koverXmlReport
 
     - name: Archive test results
       uses: actions/upload-artifact@v4
@@ -30,3 +35,47 @@ jobs:
         path: |
           build/test-results/test
           build/reports/tests/test
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarqube-scan-action@master
+      if: github.event_name == 'pull_request'
+      with:
+        args: >
+          -Dsonar.projectVersion=${{ env.VERSION }}
+          -Dsonar.pullrequest.key=${{ github.event.number }}
+          -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }}
+          -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref  }}
+          -Dsonar.organization=kronenthaler
+          -Dsonar.projectKey=kronenthaler_gha-simulator-cli
+          -Dsonar.projectName=gha-simulator-cli
+          -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/kover/xml/report.xml
+          -Dsonar.sources=src/main/
+          -Dsonar.tests=src/test/
+          -Dsonar.verbose=true
+          -Dsonar.c.file.suffixes=-
+          -Dsonar.cpp.file.suffixes=-
+          -Dsonar.objc.file.suffixes=-
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarqube-scan-action@master
+      if: github.event_name == 'push'
+      with:
+        args: >
+          -Dsonar.projectVersion=${{ env.VERSION }}
+          -Dsonar.branch.name=${{ github.ref_name }}
+          -Dsonar.organization=kronenthaler
+          -Dsonar.projectKey=kronenthaler_gha-simulator-cli
+          -Dsonar.projectName=gha-simulator-cli
+          -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/kover/xml/report.xml
+          -Dsonar.sources=src/main/
+          -Dsonar.tests=src/test/
+          -Dsonar.verbose=true
+          -Dsonar.c.file.suffixes=-
+          -Dsonar.cpp.file.suffixes=-
+          -Dsonar.objc.file.suffixes=-
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

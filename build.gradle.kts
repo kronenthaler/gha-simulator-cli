@@ -4,6 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 plugins {
     kotlin("jvm") version "2.1.20"
     application
+    id("org.jetbrains.kotlinx.kover") version "0.9.1"
 }
 
 group = "com.github.kronenthaler.gha-simulator"
