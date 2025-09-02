@@ -1,5 +1,3 @@
-
-
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kronenthaler_gha-simulator-cli&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kronenthaler_gha-simulator-cli)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=kronenthaler_gha-simulator-cli&metric=coverage)](https://sonarcloud.io/summary/new_code?id=kronenthaler_gha-simulator-cli)
 
